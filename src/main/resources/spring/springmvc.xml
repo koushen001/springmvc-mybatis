@@ -37,6 +37,12 @@
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<!-- 自定义属性编辑器 -->
 		<property name="webBindingInitializer" ref="customBinder"></property>
+		<!-- 加入json数据的消息转换器 -->
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
+			</list>
+		</property>
 	</bean>
 
 	<!-- 配置视图解析器 要求将jstl的包加到classpath -->
