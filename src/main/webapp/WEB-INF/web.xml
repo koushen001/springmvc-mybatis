@@ -4,6 +4,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
   <display-name>springmvc-mybatis</display-name>
+  <!-- 配置spring容器监听 -->
+  <context-param>
+  	<param-name>contextConfigLocation</param-name>
+  	<param-value>/WEB-INF/classes/spring/applicationContext-*.xml</param-value>
+  </context-param>
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
   <!-- 前端控制器 -->
   <servlet>
   	<servlet-name>springmvc</servlet-name>
@@ -14,7 +22,7 @@
   		<!-- 配置文件的地址
   		如果不配置contextConfigLocation，默认查找的配置文件名称classpath下的：servlet名称+"-servlet.xml",即springmvc-servlet.xml
   		 -->
-  		<param-value>classpath:springmvc.xml</param-value>
+  		<param-value>classpath:spring/springmvc.xml</param-value>
   	</init-param>
   </servlet>
   <servlet-mapping>

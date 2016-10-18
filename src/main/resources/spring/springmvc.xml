@@ -25,8 +25,6 @@
 	<!-- 注解适配器 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<!-- 在webBindingInitializer中注入自定义属性编辑器、自定义转换器 -->
-		<property name="webBindingInitializer" ref="customBinder"></property>
 	</bean>
 
 	<!-- 配置视图解析器 要求将jstl的包加到classpath -->
