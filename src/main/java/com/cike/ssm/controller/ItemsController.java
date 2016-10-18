@@ -1,22 +1,22 @@
 package com.cike.ssm.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.WebBindingInitializer;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cike.ssm.po.ItemsCustom;
@@ -30,7 +30,14 @@ public class ItemsController {
 	// 注入service
 	@Autowired
 	private ItemsService itemsService;
-
+	
+	@ModelAttribute("itemType")
+	public Map<String,String> getItemType() throws Exception{
+		Map<String, String> map = new HashMap<String,String>();
+		map.put("1", "手机");
+		map.put("2", "电脑");
+		return map;
+	}
 	@RequestMapping("/queryItems")
 	public ModelAndView queryItems(HttpServletRequest request) throws Exception {
 		System.out.println("id=" + request.getParameter("id"));
@@ -73,13 +80,29 @@ public class ItemsController {
 
 	// 商品修改提交
 	@RequestMapping("/editItemSubmit")
-	public String editItemSubmit(ItemsCustom itemsCustom) throws Exception {
+	public String editItemSubmit(@ModelAttribute(value="item")ItemsCustom item,MultipartFile pictureFile) throws Exception {
+		//进行图片上传
+		if (pictureFile!=null) {
+			//图片上传成功后，将图片地址写到数据库
+			String filePath = "D:\\AliWorkbenchData\\";
+			//文件名
+			String originalFilename = pictureFile.getOriginalFilename();
+			//文件新名字
+			String newFileName = UUID.randomUUID()+originalFilename.substring(originalFilename.lastIndexOf("."));
+			//新文件
+			File file = new File(filePath+newFileName);
+			//将内存中的文件写入磁盘
+			pictureFile.transferTo(file);
+			//图片上传成功，将新图片地址写入数据库
+			item.setPic(newFileName);
+		}
 		// 调用service更新商品信息
-		itemsService.updateItems(itemsCustom);
+		itemsService.updateItems(item);
 		// 重定向
 		return "redirect:queryItems.action";
 		// 转发
 		// return "forward:queryItems.action";
+//		return "editItem";
 	}
 
 	// 商品修改提交
@@ -91,6 +114,12 @@ public class ItemsController {
 		return "redirect:queryItems.action";
 		// 转发
 		// return "forward:queryItems.action";
+	}
+	
+	//删除商品
+	@RequestMapping("/deleteItem")
+	public String deleteItem(Integer[] delete_id) throws Exception{
+		return "success";
 	}
 
 	// 自定义属性编辑器
