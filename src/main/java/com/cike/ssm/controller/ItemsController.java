@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,9 +83,9 @@ public class ItemsController {
 
 	// 商品修改提交
 	@RequestMapping("/editItemSubmit")
-	public String editItemSubmit(@ModelAttribute(value="item")ItemsCustom item,MultipartFile pictureFile) throws Exception {
+	public String editItemSubmit(@Validated @ModelAttribute(value="item")ItemsCustom item,BindingResult bindingResult,Model model,MultipartFile pictureFile) throws Exception {
 		//进行图片上传
-		if (pictureFile!=null) {
+		if (pictureFile!=null&&pictureFile.getOriginalFilename()!=null&&pictureFile.getOriginalFilename().length()>0) {
 			//图片上传成功后，将图片地址写到数据库
 			String filePath = "D:\\AliWorkbenchData\\";
 			//文件名
@@ -95,6 +98,17 @@ public class ItemsController {
 			pictureFile.transferTo(file);
 			//图片上传成功，将新图片地址写入数据库
 			item.setPic(newFileName);
+		}
+		//如果参数绑定时有错，输出校验错误信息
+		if (bindingResult.hasErrors()) {
+			//获取错误
+			List<ObjectError> errors = bindingResult.getAllErrors();
+			//准备在页面输出
+			model.addAttribute("errors", errors);
+			for (ObjectError objectError : errors) {
+				System.out.println(objectError.getDefaultMessage());
+			}
+			return "editItem";
 		}
 		// 调用service更新商品信息
 		itemsService.updateItems(item);

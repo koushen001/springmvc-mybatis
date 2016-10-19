@@ -10,6 +10,9 @@
 
 </head>
 <body> 
+<c:forEach items="${errors}" var="error">
+	${error.defaultMessage}<br>
+</c:forEach>
 <form id="itemForm" action="${pageContext.request.contextPath}/item/editItemSubmit.action" method="post" enctype="multipart/form-data">
 <input type="hidden" name="id" value="${item.id }"/>
 修改商品信息：
