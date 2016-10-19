@@ -61,6 +61,9 @@
 		</property>
 	</bean>
 	
+	<!-- 定义统一异常处理器 -->
+	<bean class="com.cike.ssm.exception.CustomExceptionResolver"></bean>
+	
 	<!-- 注册属性编辑器 -->
 	<bean id="customPropertyEditor" class="com.cike.ssm.controller.propertyeditor.CustomPropertyEditor"></bean>
 	<!-- 自定义webBinder -->

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cike.ssm.exception.CustomException;
 import com.cike.ssm.po.ItemsCustom;
 import com.cike.ssm.po.ItemsQueryVo;
 import com.cike.ssm.service.ItemsService;
@@ -56,6 +57,8 @@ public class ItemsController {
 	// 商品修改页面展示
 	@RequestMapping(value = "/editItem", method = RequestMethod.GET)
 	public ModelAndView editItem(@RequestParam(value = "id") Integer id) throws Exception {
+		//测试统一异常处理
+		//int d = 1/0;
 		ItemsCustom itemsCustom = itemsService.findItemsById(id);
 		// 转发到jsp页面
 		ModelAndView modelAndView = new ModelAndView();
