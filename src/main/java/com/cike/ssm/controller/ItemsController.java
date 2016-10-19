@@ -16,9 +16,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -145,4 +147,9 @@ public class ItemsController {
 //		// Date.class必须与controller方法形参pojo属性一致的date类型，这里是java.util.Date
 //		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH-mm-ss"), true));
 //	}
+	@RequestMapping("/viewItem/{id}")
+	public @ResponseBody ItemsCustom viewItem(@PathVariable("id") Integer id) throws Exception{
+		ItemsCustom itemsCustom = itemsService.findItemsById(id);
+		return itemsCustom;
+	}
 }

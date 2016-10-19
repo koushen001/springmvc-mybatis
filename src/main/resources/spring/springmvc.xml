@@ -15,17 +15,12 @@
 
 	<!-- 使用spring组件扫描 -->
 	<context:component-scan base-package="com.cike.ssm.controller" />
+	
+	<!-- 静态资源解析 -->
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	
 	<!-- 使用annotation-driven可以替代下边的处理器映射器和适配器 -->
-	<!-- <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
-	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-		转换器
-		<property name="converters">
-			<list>
-				<bean class="com.cike.ssm.controller.converter.CustomDateConverter"/>
-				<bean class="com.cike.ssm.controller.converter.StringtrimConverter"/>
-			</list>
-		</property>
-	</bean> -->
+	<!-- <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>-->
 	<!-- 注解处理器映射器 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
@@ -87,6 +82,24 @@
 			</list>
 		</property>
 	</bean>
+	
+	
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<!-- 多个拦截器顺序执行 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.cike.ssm.interceptor.HandlerInterceptor1"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.cike.ssm.interceptor.HandlerInterceptor2"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.cike.ssm.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	<!-- 校验器 -->
 	<bean id="validator"

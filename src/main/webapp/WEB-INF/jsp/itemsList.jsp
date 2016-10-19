@@ -15,6 +15,10 @@
 </script>
 </head>
 <body> 
+当前用户：${username}
+<c:if test="${username!=null}">
+	<a href="${pageContext.request.contextPath }/logout.action">退出</a>
+</c:if>
 <form name="form" action="${pageContext.request.contextPath }/item/queryItem.action" method="post">
 查询条件：
 <select>
@@ -39,6 +43,7 @@
 	<td>生产日期</td>
 	<td>商品描述</td>
 	<td>操作</td>
+	<td>rest链接</td>
 </tr>
 <c:forEach items="${itemsList }" var="item">
 <tr>
@@ -49,6 +54,7 @@
 	<td>${item.detail }</td>
 	
 	<td><a href="${pageContext.request.contextPath }/item/editItem.action?id=${item.id}">修改</a></td>
+	<td><a href="${pageContext.request.contextPath }/item/viewItem/${item.id}">商品查看</a></td>
 
 </tr>
 </c:forEach>
